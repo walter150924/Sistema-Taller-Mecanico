@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.ModalPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="raiz"
+           fx:controller="com.taller.mecanico.controller.MainController"
+           styleClass="app"
+           prefWidth="1280.0" prefHeight="800.0">
+
+    <fx:define>
+        <ToggleGroup fx:id="menu"/>
+    </fx:define>
+
+    <BorderPane>
+        <left>
+            <VBox fx:id="sidebar" styleClass="sidebar" prefWidth="248.0" minWidth="248.0">
+
+                <HBox styleClass="marca" spacing="12.0">
+                    <StackPane styleClass="marca-logo">
+                        <FontIcon iconLiteral="fth-tool"/>
+                    </StackPane>
+                    <VBox fx:id="marcaTextos" spacing="1.0">
+                        <Label text="Taller Mecanico" styleClass="marca-titulo"/>
+                        <Label text="Sistema de gestion" styleClass="marca-subtitulo"/>
+                    </VBox>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="nav-scroll" VBox.vgrow="ALWAYS">
+                    <StackPane alignment="TOP_LEFT">
+                        <Region fx:id="indicador" styleClass="nav-indicador"
+                                prefHeight="42.0" maxHeight="-Infinity"/>
+                        <VBox spacing="3.0">
+                            <Label fx:id="secGeneral" text="GENERAL" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navDashboard" text="Dashboard" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-grid"/></graphic>
+                            </ToggleButton>
+                            <Label fx:id="secTaller" text="TALLER" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navOrdenes" text="Ordenes de servicio" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-clipboard"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navVehiculos" text="Vehiculos" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-truck"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navClientes" text="Clientes" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-users"/></graphic>
+                            </ToggleButton>
+                            <Label fx:id="secVentas" text="VENTAS" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navPuntoVenta" text="Venta de mostrador" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-shopping-cart"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navVentas" text="Ventas" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-file-text"/></graphic>
+                            </ToggleButton>
+                            <Label fx:id="secCompras" text="COMPRAS E INVENTARIO" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navCompra" text="Nueva compra" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-shopping-bag"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navCompras" text="Compras" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-archive"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navProveedores" text="Proveedores" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-briefcase"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navInventario" text="Inventario" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-box"/></graphic>
+                            </ToggleButton>
+                            <Label fx:id="secCatalogo" text="CATALOGO" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navServicios" text="Servicios" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-tool"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navRepuestos" text="Repuestos" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-package"/></graphic>
+                            </ToggleButton>
+                            <ToggleButton fx:id="navCategorias" text="Categorias" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-tag"/></graphic>
+                            </ToggleButton>
+                            <Label fx:id="secAdministracion" text="ADMINISTRACION" styleClass="nav-seccion"/>
+                            <ToggleButton fx:id="navUsuarios" text="Usuarios" toggleGroup="$menu"
+                                          styleClass="nav-item" maxWidth="Infinity">
+                                <graphic><FontIcon iconLiteral="fth-shield"/></graphic>
+                            </ToggleButton>
+                        </VBox>
+                    </StackPane>
+                </ScrollPane>
+
+                <Separator styleClass="nav-separador"/>
+                <HBox styleClass="usuario-sesion" spacing="10.0">
+                    <StackPane styleClass="avatar">
+                        <Label fx:id="lblIniciales"/>
+                    </StackPane>
+                    <VBox fx:id="usuarioTextos" spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblUsuario" styleClass="usuario-nombre"/>
+                        <Label fx:id="lblRol" styleClass="usuario-rol"/>
+                    </VBox>
+                </HBox>
+                <Button fx:id="btnCerrarSesion" text="Cerrar sesion" onAction="#onCerrarSesion"
+                        styleClass="nav-item" maxWidth="Infinity">
+                    <graphic><FontIcon iconLiteral="fth-log-out"/></graphic>
+                </Button>
+                <Button fx:id="btnTema" text="Modo oscuro" onAction="#onCambiarTema"
+                        styleClass="nav-item" maxWidth="Infinity">
+                    <graphic><FontIcon iconLiteral="fth-moon"/></graphic>
+                </Button>
+                <Button fx:id="btnContraer" text="Contraer menu" onAction="#onContraerMenu"
+                        styleClass="nav-item" maxWidth="Infinity">
+                    <graphic><FontIcon iconLiteral="fth-chevrons-left"/></graphic>
+                </Button>
+            </VBox>
+        </left>
+
+        <center>
+            <StackPane fx:id="contenido" styleClass="contenido"/>
+        </center>
+    </BorderPane>
+
+    <ModalPane fx:id="modalPanel"/>
+    <ModalPane fx:id="modalDialogo"/>
+    <VBox fx:id="zonaNotificaciones" styleClass="zona-notificaciones" spacing="10.0"
+          pickOnBounds="false" alignment="BOTTOM_RIGHT" viewOrder="-100"
+          StackPane.alignment="BOTTOM_RIGHT" maxWidth="-Infinity" maxHeight="-Infinity"/>
+</StackPane>

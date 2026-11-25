@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import atlantafx.base.controls.ToggleSwitch?>
+<?import com.taller.mecanico.ui.Paginador?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.taller.mecanico.controller.UsuarioController"
+      styleClass="pagina">
+
+    <fx:define>
+        <VBox fx:id="panelFormulario" styleClass="drawer"
+              prefWidth="440.0" maxWidth="440.0" maxHeight="Infinity">
+            <HBox styleClass="drawer-header">
+                <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-shield"/></StackPane>
+                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTituloFormulario" text="Nuevo usuario" styleClass="drawer-titulo"/>
+                    <Label fx:id="lblSubtituloFormulario" text="Completa los datos de acceso"
+                           styleClass="drawer-subtitulo"/>
+                </VBox>
+                <Button onAction="#onCerrarFormulario" styleClass="flat,button-circle">
+                    <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                </Button>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" styleClass="drawer-scroll" VBox.vgrow="ALWAYS">
+                <VBox styleClass="drawer-body">
+                    <Label text="DATOS PERSONALES" styleClass="seccion-form"/>
+
+                    <VBox styleClass="campo">
+                        <Label text="Nombre completo *" styleClass="campo-label"/>
+                        <TextField fx:id="txtNombreCompleto" promptText="Ej. Juan Quispe Mamani"/>
+                        <Label styleClass="campo-error" visible="false" managed="false"/>
+                    </VBox>
+
+                    <VBox styleClass="campo">
+                        <Label text="Rol *" styleClass="campo-label"/>
+                        <ComboBox fx:id="cmbRol" maxWidth="Infinity" promptText="Selecciona un rol"/>
+                        <Label styleClass="campo-error" visible="false" managed="false"/>
+                    </VBox>
+
+                    <Label text="ACCESO" styleClass="seccion-form"/>
+
+                    <VBox styleClass="campo">
+                        <Label text="Usuario *" styleClass="campo-label"/>
+                        <CustomTextField fx:id="txtNombreUsuario" promptText="Ej. jquispe">
+                            <left><FontIcon iconLiteral="fth-at-sign"/></left>
+                        </CustomTextField>
+                        <Label styleClass="campo-error" visible="false" managed="false"/>
+                    </VBox>
+
+                    <VBox styleClass="campo">
+                        <Label fx:id="lblClave" text="Contraseña *" styleClass="campo-label"/>
+                        <PasswordField fx:id="txtClave" promptText="Minimo 6 caracteres"/>
+                        <Label styleClass="campo-error" visible="false" managed="false"/>
+                    </VBox>
+
+                    <HBox styleClass="campo-switch" spacing="10.0" alignment="CENTER_LEFT">
+                        <ToggleSwitch fx:id="swActivo" selected="true"/>
+                        <Label text="Usuario activo (puede iniciar sesion)"/>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+            <HBox styleClass="drawer-footer">
+                <Button text="Cancelar" onAction="#onCerrarFormulario" styleClass="button-outlined"/>
+                <Button text="Guardar" onAction="#onGuardar" styleClass="accent" defaultButton="true">
+                    <graphic><FontIcon iconLiteral="fth-check"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </fx:define>
+
+    <HBox styleClass="pagina-cabecera">
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <Label text="Usuarios" styleClass="pagina-titulo"/>
+            <Label text="Administra quien ingresa al sistema y con que rol"
+                   styleClass="pagina-subtitulo"/>
+        </VBox>
+        <Button text="Nuevo usuario" onAction="#onNuevo" styleClass="accent,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-user-plus"/></graphic>
+        </Button>
+    </HBox>
+
+    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+        <HBox styleClass="barra-herramientas">
+            <CustomTextField fx:id="txtBuscar" promptText="Buscar por nombre o usuario"
+                             styleClass="buscador" prefWidth="340.0">
+                <left><FontIcon iconLiteral="fth-search"/></left>
+            </CustomTextField>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnEditar" text="Editar" onAction="#onEditar" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-edit-2"/></graphic>
+            </Button>
+            <Button fx:id="btnEliminar" text="Eliminar" onAction="#onEliminar"
+                    styleClass="button-outlined,danger">
+                <graphic><FontIcon iconLiteral="fth-trash-2"/></graphic>
+            </Button>
+        </HBox>
+
+        <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId"      text="ID"       prefWidth="70.0" maxWidth="90.0"/>
+                <TableColumn fx:id="colNombre"  text="NOMBRE"   prefWidth="280.0"/>
+                <TableColumn fx:id="colUsuario" text="USUARIO"  prefWidth="160.0"/>
+                <TableColumn fx:id="colRol"     text="ROL"      prefWidth="160.0"/>
+                <TableColumn fx:id="colActivo"  text="ESTADO"   prefWidth="120.0"/>
+            </columns>
+        </TableView>
+
+        <Paginador fx:id="paginador"/>
+    </VBox>
+</VBox>

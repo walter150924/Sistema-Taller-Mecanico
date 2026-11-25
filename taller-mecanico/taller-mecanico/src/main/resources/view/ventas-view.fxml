@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import com.taller.mecanico.ui.Paginador?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.taller.mecanico.controller.VentasController"
+      styleClass="pagina">
+
+    <fx:define>
+        <VBox fx:id="panelDetalle" styleClass="drawer"
+              prefWidth="560.0" maxWidth="560.0" maxHeight="Infinity">
+            <HBox styleClass="drawer-header">
+                <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-file-text"/></StackPane>
+                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <Label fx:id="lblDetComprobante" styleClass="drawer-titulo"/>
+                        <Label fx:id="lblDetEstado" styleClass="chip"/>
+                    </HBox>
+                    <Label fx:id="lblDetSubtitulo" styleClass="drawer-subtitulo"/>
+                </VBox>
+                <Button onAction="#onCerrarDetalle" styleClass="flat,button-circle">
+                    <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                </Button>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" styleClass="drawer-scroll" VBox.vgrow="ALWAYS">
+                <VBox styleClass="drawer-body">
+                    <Label text="CLIENTE" styleClass="seccion-form"/>
+                    <HBox styleClass="pv-cliente">
+                        <StackPane styleClass="avatar,avatar-grande"><Label fx:id="lblDetIniciales"/></StackPane>
+                        <VBox spacing="3.0">
+                            <Label fx:id="lblDetCliente" styleClass="pv-cliente-nombre"/>
+                            <Label fx:id="lblDetClienteDatos" styleClass="pv-cliente-dato"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label text="DETALLE" styleClass="seccion-form"/>
+                    <TableView fx:id="tablaDetalle" prefHeight="240.0" styleClass="tabla-compacta">
+                        <columns>
+                            <TableColumn fx:id="colDetItem"     text="#"        prefWidth="40.0" minWidth="40.0" maxWidth="44.0" sortable="false"/>
+                            <TableColumn fx:id="colDetRepuesto" text="REPUESTO" prefWidth="200.0" sortable="false"/>
+                            <TableColumn fx:id="colDetCantidad" text="CANT."    prefWidth="60.0" sortable="false"/>
+                            <TableColumn fx:id="colDetPrecio"   text="P. UNIT." prefWidth="90.0" sortable="false"/>
+                            <TableColumn fx:id="colDetImporte"  text="IMPORTE"  prefWidth="96.0" sortable="false"/>
+                        </columns>
+                    </TableView>
+
+                    <VBox styleClass="pv-totales">
+                        <HBox styleClass="pv-total-fila">
+                            <Label fx:id="lblDetEtiquetaBase" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <Label fx:id="lblDetBase" styleClass="pv-total-valor"/>
+                        </HBox>
+                        <HBox styleClass="pv-total-fila">
+                            <Label fx:id="lblDetEtiquetaIgv" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <Label fx:id="lblDetIgv" styleClass="pv-total-valor"/>
+                        </HBox>
+                    </VBox>
+                    <VBox styleClass="pv-total-caja">
+                        <Label text="IMPORTE TOTAL" styleClass="pv-total-caja-etiqueta"/>
+                        <Label fx:id="lblDetTotal" styleClass="pv-total-caja-valor"/>
+                        <Label fx:id="lblDetLetras" styleClass="pv-total-caja-letras" wrapText="true"/>
+                    </VBox>
+                    <Label fx:id="lblDetObservacion" styleClass="pagina-subtitulo" wrapText="true"/>
+                </VBox>
+            </ScrollPane>
+
+            <HBox styleClass="drawer-footer">
+                <Button text="Guardar PDF" onAction="#onDescargarDetalle" styleClass="button-outlined">
+                    <graphic><FontIcon iconLiteral="fth-download"/></graphic>
+                </Button>
+                <Button text="Imprimir" onAction="#onImprimirDetalle" styleClass="accent">
+                    <graphic><FontIcon iconLiteral="fth-printer"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </fx:define>
+
+    <HBox styleClass="pagina-cabecera">
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <Label text="Ventas" styleClass="pagina-titulo"/>
+            <Label text="Historial de comprobantes emitidos, impresion y reportes"
+                   styleClass="pagina-subtitulo"/>
+        </VBox>
+        <Button text="Exportar Excel" onAction="#onExportarExcel" styleClass="button-outlined,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-file-text"/></graphic>
+        </Button>
+        <Button text="Nueva venta" onAction="#onNuevaVenta" styleClass="accent,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+        </Button>
+    </HBox>
+
+    <HBox styleClass="resumen-filtro">
+        <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+            <Label text="Comprobantes" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResComprobantes" text="0" styleClass="resumen-filtro-valor"/>
+        </VBox>
+        <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+            <Label text="Base imponible" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResBase" styleClass="resumen-filtro-valor"/>
+        </VBox>
+        <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+            <Label text="IGV" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResIgv" styleClass="resumen-filtro-valor"/>
+        </VBox>
+        <VBox styleClass="resumen-filtro-item,destacado" HBox.hgrow="ALWAYS">
+            <Label text="Total vendido" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResTotal" styleClass="resumen-filtro-valor"/>
+        </VBox>
+    </HBox>
+
+    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+        <HBox styleClass="barra-herramientas">
+            <CustomTextField fx:id="txtBuscar" promptText="Comprobante, cliente o DNI"
+                             styleClass="buscador" prefWidth="280.0">
+                <left><FontIcon iconLiteral="fth-search"/></left>
+            </CustomTextField>
+            <DatePicker fx:id="dpDesde" promptText="Desde" prefWidth="140.0" styleClass="selector-fecha"/>
+            <DatePicker fx:id="dpHasta" promptText="Hasta" prefWidth="140.0" styleClass="selector-fecha"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnVer" text="Ver" onAction="#onVer" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-eye"/></graphic>
+            </Button>
+            <Button fx:id="btnImprimir" text="Imprimir" onAction="#onImprimir" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-printer"/></graphic>
+            </Button>
+            <Button fx:id="btnAnular" text="Anular" onAction="#onAnular" styleClass="button-outlined,danger">
+                <graphic><FontIcon iconLiteral="fth-slash"/></graphic>
+            </Button>
+        </HBox>
+
+        <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colComprobante" text="COMPROBANTE" prefWidth="140.0" minWidth="136.0"/>
+                <TableColumn fx:id="colFecha"       text="FECHA"       prefWidth="136.0" minWidth="136.0"/>
+                <TableColumn fx:id="colCliente"     text="CLIENTE"     prefWidth="220.0" minWidth="160.0"/>
+                <TableColumn fx:id="colDni"         text="DNI"         prefWidth="96.0" minWidth="96.0"/>
+                <TableColumn fx:id="colBase"        text="BASE IMP."   prefWidth="110.0"/>
+                <TableColumn fx:id="colIgv"         text="IGV"         prefWidth="95.0"/>
+                <TableColumn fx:id="colTotal"       text="TOTAL"       prefWidth="115.0"/>
+                <TableColumn fx:id="colEstado"      text="ESTADO"      prefWidth="110.0" minWidth="110.0"/>
+            </columns>
+        </TableView>
+
+        <Paginador fx:id="paginador"/>
+    </VBox>
+</VBox>

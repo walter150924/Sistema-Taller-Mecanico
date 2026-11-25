@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="raiz"
+      fx:controller="com.taller.mecanico.controller.OrdenDetalleController"
+      styleClass="drawer"
+      prefWidth="780.0" maxWidth="780.0" maxHeight="Infinity">
+
+    <fx:define>
+        <VBox fx:id="dialogoCobro" styleClass="dialogo" spacing="14.0" maxWidth="440.0" maxHeight="-Infinity">
+            <StackPane styleClass="dialogo-icono,exito"><FontIcon iconLiteral="fth-dollar-sign"/></StackPane>
+            <Label text="Cobrar y entregar" styleClass="dialogo-titulo"/>
+            <Label fx:id="lblCobroTotal" styleClass="dialogo-mensaje"/>
+            <VBox styleClass="campo">
+                <Label text="Metodo de pago *" styleClass="campo-label"/>
+                <ComboBox fx:id="cmbMetodoPago" maxWidth="Infinity"/>
+            </VBox>
+            <HBox styleClass="dialogo-acciones" spacing="10.0" alignment="CENTER_RIGHT">
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Cancelar" onAction="#onCancelarCobro" styleClass="button-outlined" cancelButton="true"/>
+                <Button text="Cobrar y entregar" onAction="#onConfirmarCobro" styleClass="accent">
+                    <graphic><FontIcon iconLiteral="fth-check"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </fx:define>
+
+    <HBox styleClass="drawer-header">
+        <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-clipboard"/></StackPane>
+        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label fx:id="lblCodigo" styleClass="drawer-titulo"/>
+                <Label fx:id="lblEstado" styleClass="chip"/>
+            </HBox>
+            <Label fx:id="lblSubtitulo" styleClass="drawer-subtitulo"/>
+        </VBox>
+        <Button onAction="#onCerrar" styleClass="flat,button-circle">
+            <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+        </Button>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" styleClass="drawer-scroll" VBox.vgrow="ALWAYS">
+        <VBox styleClass="drawer-body">
+            <Label text="DATOS DEL INGRESO" styleClass="seccion-form"/>
+            <GridPane styleClass="detalle-datos" hgap="14.0" vgap="8.0">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="110.0"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Cliente" styleClass="campo-label" GridPane.rowIndex="0"/>
+                <Label fx:id="lblCliente" styleClass="detalle-dato" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Vehiculo" styleClass="campo-label" GridPane.rowIndex="1"/>
+                <Label fx:id="lblVehiculo" styleClass="detalle-dato" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Kilometraje" styleClass="campo-label" GridPane.rowIndex="2"/>
+                <Label fx:id="lblKilometraje" styleClass="detalle-dato" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Problema" styleClass="campo-label" GridPane.rowIndex="3"/>
+                <Label fx:id="lblProblema" styleClass="detalle-dato" wrapText="true"
+                       GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Label text="Mecanico" styleClass="campo-label" GridPane.rowIndex="4"/>
+                <Label fx:id="lblMecanico" styleClass="detalle-dato" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                <Label text="Pago" styleClass="campo-label" GridPane.rowIndex="5"/>
+                <Label fx:id="lblPago" styleClass="detalle-dato" wrapText="true" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <HBox fx:id="barraAsignacion" spacing="10.0" alignment="CENTER_LEFT">
+                <ComboBox fx:id="cmbMecanico" HBox.hgrow="ALWAYS" maxWidth="Infinity" promptText="Selecciona un mecanico"/>
+                <Button text="Asignar" onAction="#onAsignarMecanico" styleClass="button-outlined">
+                    <graphic><FontIcon iconLiteral="fth-user-check"/></graphic>
+                </Button>
+            </HBox>
+
+            <Label text="DIAGNOSTICO" styleClass="seccion-form"/>
+            <TextArea fx:id="txtDiagnostico" prefRowCount="3" wrapText="true"
+                      promptText="Describe la falla encontrada y el trabajo a realizar"/>
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="btnGuardarDiagnostico" text="Guardar diagnostico" onAction="#onGuardarDiagnostico"
+                        styleClass="button-outlined">
+                    <graphic><FontIcon iconLiteral="fth-save"/></graphic>
+                </Button>
+            </HBox>
+
+            <Label text="SERVICIOS (MANO DE OBRA)" styleClass="seccion-form"/>
+            <HBox fx:id="barraServicios" spacing="10.0" alignment="CENTER_LEFT">
+                <ComboBox fx:id="cmbServicio" HBox.hgrow="ALWAYS" maxWidth="Infinity" promptText="Selecciona un servicio"/>
+                <Button text="Agregar" onAction="#onAgregarServicio" styleClass="accent">
+                    <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+                </Button>
+            </HBox>
+            <TableView fx:id="tablaServicios" prefHeight="170.0">
+                <columns>
+                    <TableColumn fx:id="colServicio"       text="SERVICIO" prefWidth="420.0"/>
+                    <TableColumn fx:id="colPrecioServicio" text="PRECIO"   prefWidth="120.0"/>
+                    <TableColumn fx:id="colQuitarServicio" text=""         prefWidth="60.0" maxWidth="60.0"/>
+                </columns>
+            </TableView>
+
+            <Label text="REPUESTOS UTILIZADOS" styleClass="seccion-form"/>
+            <HBox fx:id="barraRepuestos" spacing="10.0" alignment="CENTER_LEFT">
+                <CustomTextField fx:id="txtRepuesto" HBox.hgrow="ALWAYS" promptText="Busca el repuesto por nombre o codigo">
+                    <left><FontIcon iconLiteral="fth-package"/></left>
+                </CustomTextField>
+                <Spinner fx:id="spnCantidad" prefWidth="100.0" editable="true"/>
+                <Button text="Agregar" onAction="#onAgregarRepuesto" styleClass="accent">
+                    <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+                </Button>
+            </HBox>
+            <TableView fx:id="tablaRepuestos" prefHeight="190.0">
+                <columns>
+                    <TableColumn fx:id="colCodigoRepuesto"  text="CODIGO"   prefWidth="90.0"/>
+                    <TableColumn fx:id="colRepuesto"        text="REPUESTO" prefWidth="260.0"/>
+                    <TableColumn fx:id="colCantidad"        text="CANT."    prefWidth="70.0"/>
+                    <TableColumn fx:id="colPrecioRepuesto"  text="P. UNIT." prefWidth="100.0"/>
+                    <TableColumn fx:id="colImporteRepuesto" text="IMPORTE"  prefWidth="100.0"/>
+                    <TableColumn fx:id="colQuitarRepuesto"  text=""         prefWidth="60.0" maxWidth="60.0"/>
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_RIGHT">
+                <GridPane styleClass="detalle-totales" hgap="14.0" vgap="6.0" maxWidth="320.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                        <ColumnConstraints halignment="RIGHT"/>
+                    </columnConstraints>
+                    <Label text="Mano de obra" GridPane.rowIndex="0"/>
+                    <Label fx:id="lblTotalServicios" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Repuestos" GridPane.rowIndex="1"/>
+                    <Label fx:id="lblTotalRepuestos" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Op. gravada" GridPane.rowIndex="2"/>
+                    <Label fx:id="lblBase" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Label text="IGV (18%)" GridPane.rowIndex="3"/>
+                    <Label fx:id="lblIgv" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    <Label text="Total" styleClass="detalle-total" GridPane.rowIndex="4"/>
+                    <Label fx:id="lblTotal" styleClass="detalle-total" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                </GridPane>
+            </HBox>
+        </VBox>
+    </ScrollPane>
+
+    <HBox styleClass="drawer-footer">
+        <Button text="Imprimir" onAction="#onImprimir" styleClass="button-outlined">
+            <graphic><FontIcon iconLiteral="fth-printer"/></graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox fx:id="accionesEstado" spacing="10.0" alignment="CENTER_RIGHT"/>
+    </HBox>
+</VBox>

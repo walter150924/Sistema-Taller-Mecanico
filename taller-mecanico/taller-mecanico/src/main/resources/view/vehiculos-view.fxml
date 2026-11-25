@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import com.taller.mecanico.ui.Paginador?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.taller.mecanico.controller.VehiculoController"
+      styleClass="pagina">
+
+    <fx:define>
+        <VBox fx:id="panelFormulario" styleClass="drawer"
+              prefWidth="460.0" maxWidth="460.0" maxHeight="Infinity">
+            <HBox styleClass="drawer-header">
+                <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-truck"/></StackPane>
+                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTituloFormulario" text="Nuevo vehiculo" styleClass="drawer-titulo"/>
+                    <Label fx:id="lblSubtituloFormulario" text="Registra el vehiculo y su propietario"
+                           styleClass="drawer-subtitulo"/>
+                </VBox>
+                <Button onAction="#onCerrarFormulario" styleClass="flat,button-circle">
+                    <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                </Button>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" styleClass="drawer-scroll" VBox.vgrow="ALWAYS">
+                <VBox styleClass="drawer-body">
+                    <Label text="PROPIETARIO" styleClass="seccion-form"/>
+
+                    <VBox styleClass="campo">
+                        <Label text="Cliente *" styleClass="campo-label"/>
+                        <CustomTextField fx:id="txtCliente" promptText="Busca por DNI o nombre">
+                            <left><FontIcon iconLiteral="fth-user"/></left>
+                        </CustomTextField>
+                        <Label styleClass="campo-error" visible="false" managed="false"/>
+                    </VBox>
+
+                    <Label text="VEHICULO" styleClass="seccion-form"/>
+
+                    <HBox spacing="14.0">
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Placa *" styleClass="campo-label"/>
+                            <TextField fx:id="txtPlaca" promptText="ABC-123"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Año *" styleClass="campo-label"/>
+                            <TextField fx:id="txtAnio" promptText="Ej. 2018"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="14.0">
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Marca *" styleClass="campo-label"/>
+                            <TextField fx:id="txtMarca" promptText="Ej. Toyota"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Modelo *" styleClass="campo-label"/>
+                            <TextField fx:id="txtModelo" promptText="Ej. Yaris"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="14.0">
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Color" styleClass="campo-label"/>
+                            <TextField fx:id="txtColor" promptText="Ej. Plata"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                        <VBox styleClass="campo" HBox.hgrow="ALWAYS">
+                            <Label text="Kilometraje *" styleClass="campo-label"/>
+                            <TextField fx:id="txtKilometraje" promptText="Ej. 45000"/>
+                            <Label styleClass="campo-error" visible="false" managed="false"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+            <HBox styleClass="drawer-footer">
+                <Button text="Cancelar" onAction="#onCerrarFormulario" styleClass="button-outlined"/>
+                <Button text="Guardar" onAction="#onGuardar" styleClass="accent" defaultButton="true">
+                    <graphic><FontIcon iconLiteral="fth-check"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+        <VBox fx:id="panelHistorial" styleClass="drawer"
+              prefWidth="640.0" maxWidth="640.0" maxHeight="Infinity">
+            <HBox styleClass="drawer-header">
+                <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-clock"/></StackPane>
+                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTituloHistorial" styleClass="drawer-titulo"/>
+                    <Label fx:id="lblSubtituloHistorial" styleClass="drawer-subtitulo"/>
+                </VBox>
+                <Button onAction="#onCerrarFormulario" styleClass="flat,button-circle">
+                    <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                </Button>
+            </HBox>
+            <VBox styleClass="drawer-body" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colHistCodigo"      text="ORDEN"      prefWidth="100.0"/>
+                        <TableColumn fx:id="colHistFecha"       text="INGRESO"    prefWidth="120.0"/>
+                        <TableColumn fx:id="colHistKilometraje" text="KM"         prefWidth="90.0"/>
+                        <TableColumn fx:id="colHistDiagnostico" text="TRABAJO"    prefWidth="200.0"/>
+                        <TableColumn fx:id="colHistEstado"      text="ESTADO"     prefWidth="130.0"/>
+                        <TableColumn fx:id="colHistTotal"       text="TOTAL"      prefWidth="100.0"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </fx:define>
+
+    <HBox styleClass="pagina-cabecera">
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <Label text="Vehiculos" styleClass="pagina-titulo"/>
+            <Label text="Vehiculos de los clientes y su historial de servicios" styleClass="pagina-subtitulo"/>
+        </VBox>
+        <Button text="Nuevo vehiculo" onAction="#onNuevo" styleClass="accent,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+        </Button>
+    </HBox>
+
+    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+        <HBox styleClass="barra-herramientas">
+            <CustomTextField fx:id="txtBuscar" promptText="Buscar por placa, marca, modelo o propietario"
+                             styleClass="buscador" prefWidth="380.0">
+                <left><FontIcon iconLiteral="fth-search"/></left>
+            </CustomTextField>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnHistorial" text="Historial" onAction="#onHistorial" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-clock"/></graphic>
+            </Button>
+            <Button fx:id="btnEditar" text="Editar" onAction="#onEditar" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-edit-2"/></graphic>
+            </Button>
+            <Button fx:id="btnEliminar" text="Eliminar" onAction="#onEliminar"
+                    styleClass="button-outlined,danger">
+                <graphic><FontIcon iconLiteral="fth-trash-2"/></graphic>
+            </Button>
+        </HBox>
+
+        <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colPlaca"       text="PLACA"        prefWidth="110.0"/>
+                <TableColumn fx:id="colVehiculo"    text="VEHICULO"     prefWidth="240.0"/>
+                <TableColumn fx:id="colPropietario" text="PROPIETARIO"  prefWidth="260.0"/>
+                <TableColumn fx:id="colColor"       text="COLOR"        prefWidth="110.0"/>
+                <TableColumn fx:id="colKilometraje" text="KILOMETRAJE"  prefWidth="130.0"/>
+            </columns>
+        </TableView>
+
+        <Paginador fx:id="paginador"/>
+    </VBox>
+</VBox>

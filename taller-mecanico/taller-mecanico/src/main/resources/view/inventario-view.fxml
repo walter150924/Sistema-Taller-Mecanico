@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import atlantafx.base.controls.CustomTextField?>
+<?import com.taller.mecanico.ui.Paginador?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.taller.mecanico.controller.InventarioController"
+      styleClass="pagina">
+
+    <fx:define>
+        <VBox fx:id="panelKardex" styleClass="drawer"
+              prefWidth="740.0" maxWidth="740.0" maxHeight="Infinity">
+            <HBox styleClass="drawer-header">
+                <StackPane styleClass="drawer-icono"><FontIcon iconLiteral="fth-list"/></StackPane>
+                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblKarRepuesto" styleClass="drawer-titulo" wrapText="true"/>
+                    <Label fx:id="lblKarSubtitulo" styleClass="drawer-subtitulo"/>
+                </VBox>
+                <Button onAction="#onCerrarKardex" styleClass="flat,button-circle">
+                    <graphic><FontIcon iconLiteral="fth-x"/></graphic>
+                </Button>
+            </HBox>
+
+            <VBox styleClass="drawer-body" VBox.vgrow="ALWAYS">
+                <HBox styleClass="resumen-filtro">
+                    <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+                        <Label text="Stock actual" styleClass="kpi-titulo"/>
+                        <Label fx:id="lblKarStock" styleClass="resumen-filtro-valor"/>
+                    </VBox>
+                    <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+                        <Label text="Costo promedio" styleClass="kpi-titulo"/>
+                        <Label fx:id="lblKarCosto" styleClass="resumen-filtro-valor"/>
+                    </VBox>
+                    <VBox styleClass="resumen-filtro-item,destacado" HBox.hgrow="ALWAYS">
+                        <Label text="Valor al costo" styleClass="kpi-titulo"/>
+                        <Label fx:id="lblKarValor" styleClass="resumen-filtro-valor"/>
+                    </VBox>
+                </HBox>
+                <HBox spacing="18.0">
+                    <Label fx:id="lblKarEntradas" styleClass="kardex-total,entrada">
+                        <graphic><FontIcon iconLiteral="fth-arrow-down-left"/></graphic>
+                    </Label>
+                    <Label fx:id="lblKarSalidas" styleClass="kardex-total,salida">
+                        <graphic><FontIcon iconLiteral="fth-arrow-up-right"/></graphic>
+                    </Label>
+                </HBox>
+                <TableView fx:id="tablaKardex" VBox.vgrow="ALWAYS" styleClass="tabla-compacta">
+                    <columns>
+                        <TableColumn fx:id="colKarFecha"      text="FECHA"      prefWidth="140.0" minWidth="140.0" sortable="false"/>
+                        <TableColumn fx:id="colKarTipo"       text="MOVIMIENTO" prefWidth="150.0" minWidth="150.0" sortable="false"/>
+                        <TableColumn fx:id="colKarDocumento"  text="DOCUMENTO"  prefWidth="160.0" sortable="false"/>
+                        <TableColumn fx:id="colKarEntrada"    text="ENTRADA"    prefWidth="74.0"  minWidth="74.0" sortable="false"/>
+                        <TableColumn fx:id="colKarSalida"     text="SALIDA"     prefWidth="74.0"  minWidth="74.0" sortable="false"/>
+                        <TableColumn fx:id="colKarSaldo"      text="SALDO"      prefWidth="74.0"  minWidth="74.0" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <HBox styleClass="drawer-footer">
+                <Button text="Cerrar" onAction="#onCerrarKardex" styleClass="button-outlined"/>
+                <Button text="Reponer stock" onAction="#onReponerDesdeKardex" styleClass="accent">
+                    <graphic><FontIcon iconLiteral="fth-shopping-bag"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </fx:define>
+
+    <HBox styleClass="pagina-cabecera">
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+            <Label text="Inventario" styleClass="pagina-titulo"/>
+            <Label text="Stock actualizado con cada compra (suma) y cada venta (resta), valorizado al costo promedio"
+                   styleClass="pagina-subtitulo"/>
+        </VBox>
+        <Button text="Exportar Excel" onAction="#onExportarExcel" styleClass="button-outlined,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-file-text"/></graphic>
+        </Button>
+        <Button text="Nueva compra" onAction="#onNuevaCompra" styleClass="accent,boton-principal">
+            <graphic><FontIcon iconLiteral="fth-plus"/></graphic>
+        </Button>
+    </HBox>
+
+    <HBox styleClass="resumen-filtro">
+        <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+            <Label text="Unidades en stock" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResUnidades" text="0" styleClass="resumen-filtro-valor"/>
+            <Label fx:id="lblResRepuestos" styleClass="kpi-detalle"/>
+        </VBox>
+        <VBox styleClass="resumen-filtro-item,destacado" HBox.hgrow="ALWAYS">
+            <Label text="Valor al costo" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResCosto" styleClass="resumen-filtro-valor"/>
+            <Label text="Costo promedio sin IGV" styleClass="kpi-detalle"/>
+        </VBox>
+        <VBox styleClass="resumen-filtro-item" HBox.hgrow="ALWAYS">
+            <Label text="Valor a precio de venta" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResVenta" styleClass="resumen-filtro-valor"/>
+            <Label fx:id="lblResMargen" styleClass="kpi-detalle"/>
+        </VBox>
+        <VBox fx:id="kpiBajo" styleClass="resumen-filtro-item,alerta" HBox.hgrow="ALWAYS">
+            <Label text="Stock bajo" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResBajo" styleClass="resumen-filtro-valor"/>
+            <Label text="En o bajo el stock minimo" styleClass="kpi-detalle"/>
+        </VBox>
+        <VBox fx:id="kpiSin" styleClass="resumen-filtro-item,alerta-critica" HBox.hgrow="ALWAYS">
+            <Label text="Sin stock" styleClass="kpi-titulo"/>
+            <Label fx:id="lblResSin" styleClass="resumen-filtro-valor"/>
+            <Label text="No se pueden vender" styleClass="kpi-detalle"/>
+        </VBox>
+    </HBox>
+
+    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+        <HBox styleClass="barra-herramientas">
+            <CustomTextField fx:id="txtBuscar" promptText="Buscar por codigo o nombre"
+                             styleClass="buscador" prefWidth="300.0">
+                <left><FontIcon iconLiteral="fth-search"/></left>
+            </CustomTextField>
+            <ComboBox fx:id="cmbFiltro" prefWidth="190.0" styleClass="selector-periodo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnReponer" text="Reponer" onAction="#onReponer" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-shopping-bag"/></graphic>
+            </Button>
+            <Button fx:id="btnKardex" text="Kardex" onAction="#onKardex" styleClass="button-outlined">
+                <graphic><FontIcon iconLiteral="fth-list"/></graphic>
+            </Button>
+        </HBox>
+
+        <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colCodigo"    text="CODIGO"        prefWidth="110.0" minWidth="104.0"/>
+                <TableColumn fx:id="colNombre"    text="REPUESTO"      prefWidth="260.0" minWidth="160.0"/>
+                <TableColumn fx:id="colCategoria" text="CATEGORIA"     prefWidth="150.0"/>
+                <TableColumn fx:id="colStock"     text="STOCK"         prefWidth="110.0" minWidth="100.0"/>
+                <TableColumn fx:id="colMinimo"    text="MINIMO"        prefWidth="80.0"  minWidth="70.0"/>
+                <TableColumn fx:id="colCosto"     text="COSTO PROM."   prefWidth="110.0"/>
+                <TableColumn fx:id="colValor"     text="VALOR"         prefWidth="120.0"/>
+                <TableColumn fx:id="colPrecio"    text="PRECIO VENTA"  prefWidth="110.0"/>
+            </columns>
+        </TableView>
+
+        <Paginador fx:id="paginador"/>
+    </VBox>
+</VBox>
